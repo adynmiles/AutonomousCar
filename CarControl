@@ -1,0 +1,63 @@
+#define trigPin 3             /*The trig pin transmits a signal (high-frequency sound) which is reflected and received by the echo pin*/
+#define echoPin 4             /*Time between transmission and reception lets us know the distance*/
+
+/*Define these variables just to make it more clear for the pin assignments*/
+int enA = 5;                  /*5th pin in motor driver*/
+int in1 = 6;                  /*6th pin in motor driver*/
+int in2 = 7;
+int in3 = 8;
+int in4 = 9;
+int enB = 10; 
+long duration, distance;
+
+/*pinMode configures a specified pin to act as either an input or an output*/
+void setup() {
+  Serial.begin (9600);        /*Sets data rate in bits per second for data transmission*/
+  pinMode(trigPin, OUTPUT);   /*3rd pin in the ultrasonic sensor*/
+  pinMode(echoPin, INPUT);    /*4th pin in the ultrasonic sensor*/
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+  pinMode(in3, OUTPUT);
+  pinMode(in4, OUTPUT);
+  pinMode(enB, OUTPUT); 
+}
+
+void loop() {
+  /*Measuring the distance between the car and the obstacles.*/
+  digitalWrite(trigPin, LOW);          /*Digital Write lets you write a high or low value to a pin*/
+  delayMicroseconds(2);                /*Giving a short low pulse to ensure a clean high pulse*/
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);               /*Sensor is triggered by a 10 microsecond high pulse, so give it that*/
+  digitalWrite(trigPin, LOW);          /*Set it back to low to be able to read pulses.*/
+  duration = pulseIn(echoPin, HIGH);   /*pulseIn returns length of the pulse in microseconds*/ 
+  distance = duration/58.2;            /*makes the conversion to cm from the (duration/2)/(29.1cm/uS)
+  
+  /*Decide what the car should do as a result of distances less than 10 cm.*/
+  if (distance <= 10){
+    Serial.println("Reversing");      /*Reverse the rear motor to the left if necessary.*/
+    digitalWrite(in1, LOW);           /*Applying high and low pulses to the different inputs will allow you to turn and move*/
+    digitalWrite(in2, HIGH);
+    analogWrite(enA, 250); 
+    /*Turn the front motor tires leftward.*/
+    digitalWrite(in3, HIGH);
+    digitalWrite(in4, LOW);   
+    analogWrite(enB, 250);
+    delay(750);
+    //Turn off both motors
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
+    digitalWrite(in3, LOW);
+    digitalWrite(in4, LOW);
+  }
+  else {
+    Serial.println("Driving");
+    //Drive Forward 
+    digitalWrite(in1, HIGH);
+    digitalWrite(in2, LOW);
+    analogWrite(enA, 225);
+    digitalWrite(in3, LOW); 
+    digitalWrite(in4, LOW);
+    delay(100);
+  }
+}
