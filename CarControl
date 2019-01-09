@@ -34,18 +34,22 @@ void loop() {
   distance = duration/58.2;            /*makes the conversion to cm from the (duration/2)/(29.1cm/uS)
   
   /*Decide what the car should do as a result of distances less than 10 cm.*/
+  /*For the digitalWrite commands in this function, I used a truth table for the motor driver in order to control the direction  of the car 
+  based on a series of high and low pulses*/
+  /*The analogWrite commands adjusts the duty cycle for the PWM inputs, i.e. how much of the time is the input high. I just set them all to 
+  255 (100% duty cycle - always on), though I could set it to a lower value if, for instance, I want the car to reverse more cautiously.*/
   if (distance <= 10){
     Serial.println("Reversing");      /*Reverse the rear motor to the left if necessary.*/
     digitalWrite(in1, LOW);           /*Applying high and low pulses to the different inputs will allow you to turn and move*/
     digitalWrite(in2, HIGH);
-    analogWrite(enA, 250); 
+    analogWrite(enA, 255); 
     /*Turn the front motor tires leftward.*/
-    digitalWrite(in3, HIGH);
+    digitalWrite(in3, HIGH);        
     digitalWrite(in4, LOW);   
-    analogWrite(enB, 250);
-    delay(750);
+    analogWrite(enB, 255);
+    delay(750);                 
     //Turn off both motors
-    digitalWrite(in1, LOW);
+    digitalWrite(in1, LOW);            /*All low inputs will stop the car*/ 
     digitalWrite(in2, LOW);
     digitalWrite(in3, LOW);
     digitalWrite(in4, LOW);
@@ -55,9 +59,10 @@ void loop() {
     //Drive Forward 
     digitalWrite(in1, HIGH);
     digitalWrite(in2, LOW);
-    analogWrite(enA, 225);
-    digitalWrite(in3, LOW); 
+    analogWrite(enA, 255);
+    digitalWrite(in3, HIGH); 
     digitalWrite(in4, LOW);
+    analogWrite(enB, 255)
     delay(100);
   }
 }
