@@ -2,8 +2,8 @@
 #define echoPin 4             /*Time between transmission and reception lets us know the distance*/
 
 /*Define these variables just to make it more clear for the pin assignments*/
-int enA = 5;                  /*5th pin in motor driver*/
-int in1 = 6;                  /*6th pin in motor driver*/
+int enA = 5;                  /*5th pin in Arduino goes to enA*/
+int in1 = 6;                  
 int in2 = 7;
 int in3 = 8;
 int in4 = 9;
@@ -13,8 +13,8 @@ long duration, distance;
 /*pinMode configures a specified pin to act as either an input or an output*/
 void setup() {
   Serial.begin (9600);        /*Sets data rate in bits per second for data transmission*/
-  pinMode(trigPin, OUTPUT);   /*3rd pin in the ultrasonic sensor*/
-  pinMode(echoPin, INPUT);    /*4th pin in the ultrasonic sensor*/
+  pinMode(trigPin, OUTPUT);   /*3rd pin in Arduino goes to ultrasonic sensor*/
+  pinMode(echoPin, INPUT);    
   pinMode(enA, OUTPUT);
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
